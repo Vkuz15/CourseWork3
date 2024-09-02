@@ -4,10 +4,8 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.request.SendMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pro.sky.telegrambot.model.NotificationTask;
 import pro.sky.telegrambot.service.NotificationTaskService;
@@ -49,24 +47,17 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             if (message != null) {
                 if ("/start".equals(message.text())) {
                     sendMessage(telegramBot, message.chat().id(), WELCOME_MESSAGE);
-                }
-                try {
-                    addTask(message.chat().id(), message.text());
-                } catch (Exception exception) {
-                    sendMessage(telegramBot, message.chat().id(), BAD_REQUEST_TIME_FORMATTER);
+                } else {
+                    try {
+                        addTask(message.chat().id(), message.text());
+                    } catch (Exception exception) {
+                        logger.error("Error adding task: {}", exception.getMessage());
+                        sendMessage(telegramBot, message.chat().id(), BAD_REQUEST_TIME_FORMATTER);
+                    }
                 }
             }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
-    }
-
-    @Scheduled(cron = "0 0/1 * * * *")
-    public void run() {
-        NotificationTask task = notificationTaskService.findNotificationTaskByDate();
-        if (task != null) {
-            SendMessage message = new SendMessage(task.getChatId(), "Ваше напоминание:\n" + task.getMessage());
-            telegramBot.execute(message);
-        }
     }
 
     private void addTask(Long chatId, String task) throws DateTimeParseException {

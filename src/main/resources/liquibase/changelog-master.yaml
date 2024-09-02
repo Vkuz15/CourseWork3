@@ -1,5 +1,4 @@
 databaseChangeLog:
-  - logicalFilePath: /liquibase/changelog-master.yaml
   - changeSet:
       id: 5
       author: vkuznecov

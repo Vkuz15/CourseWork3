@@ -9,11 +9,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TelegramBotConfiguration {
 
-    @Value("7341978843:AAG63bw6kcpTqTmUJOZaX2LfisuQ7Xk0UyE")
+    @Value("${telegram.bot.token}")
     private String token;
 
     @Bean
     public TelegramBot telegramBot() {
+        if (token == null || token.isEmpty()) {
+            throw new IllegalArgumentException("Telegram bot token must be provided");
+        }
+
         TelegramBot bot = new TelegramBot(token);
         bot.execute(new DeleteMyCommands());
         return bot;

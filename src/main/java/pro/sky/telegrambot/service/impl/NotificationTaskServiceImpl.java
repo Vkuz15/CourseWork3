@@ -16,7 +16,6 @@ public class NotificationTaskServiceImpl implements NotificationTaskService {
 
     @Override
     public void save(NotificationTask task) {
-        task.setId(null);
         notificationTaskRepository.save(task);
     }
 
