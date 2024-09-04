@@ -5,6 +5,10 @@ import pro.sky.telegrambot.model.NotificationTask;
 import pro.sky.telegrambot.repository.NotificationTaskRepository;
 import pro.sky.telegrambot.service.NotificationTaskService;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
 @Service
 public class NotificationTaskServiceImpl implements NotificationTaskService {
 
@@ -20,7 +24,8 @@ public class NotificationTaskServiceImpl implements NotificationTaskService {
     }
 
     @Override
-    public NotificationTask findNotificationTaskByDate() {
-        return notificationTaskRepository.findNotificationTaskByDate();
+    public List<NotificationTask> findNotificationTasksByDate() {
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+        return notificationTaskRepository.findNotificationTaskByDate(now);
     }
 }

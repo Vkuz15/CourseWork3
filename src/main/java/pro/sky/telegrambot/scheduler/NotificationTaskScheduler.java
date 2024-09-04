@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import pro.sky.telegrambot.model.NotificationTask;
 import pro.sky.telegrambot.service.NotificationTaskService;
 
+import java.util.List;
+
 @Component
 public class NotificationTaskScheduler {
 
@@ -20,8 +22,8 @@ public class NotificationTaskScheduler {
 
     @Scheduled(cron = "0 0/1 * * * *")
     public void run() {
-        NotificationTask task = notificationTaskService.findNotificationTaskByDate();
-        if (task != null) {
+        List<NotificationTask> tasks = notificationTaskService.findNotificationTasksByDate();
+        for (NotificationTask task : tasks) {
             SendMessage message = new SendMessage(task.getChatId(), "Ваше напоминание:\n" + task.getMessage());
             telegramBot.execute(message);
         }
