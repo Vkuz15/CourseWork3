@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - logicalFilePath: /liquibase/changelog-master.yaml
+  - changeSet:
+      id: 5
+      author: vkuznecov
+      changes:
+        - createTable:
+            tableName: notification_task
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: chat_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: message
+                  type: varchar(255)
+                  constraints:
+                    nullable: false

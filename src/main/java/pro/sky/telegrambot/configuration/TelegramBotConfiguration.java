@@ -14,6 +14,10 @@ public class TelegramBotConfiguration {
 
     @Bean
     public TelegramBot telegramBot() {
+        if (token == null || token.isEmpty()) {
+            throw new IllegalArgumentException("Telegram bot token must be provided");
+        }
+
         TelegramBot bot = new TelegramBot(token);
         bot.execute(new DeleteMyCommands());
         return bot;
